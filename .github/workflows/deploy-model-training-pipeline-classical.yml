@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
 jobs:
   get-config:
-      uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@main
+      uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@db3912275f3d10f7e5f30ade4491f92cb3cae0cc
       with:
         file_name: config-infra-prod.yml
   register-environment:
       needs: get-config
-      uses: Azure/mlops-templates/.github/workflows/register-environment.yml@main
+      uses: Azure/mlops-templates/.github/workflows/register-environment.yml@db3912275f3d10f7e5f30ade4491f92cb3cae0cc
       with:
         resource_group: ${{ needs.get-config.outputs.resource_group }}
         workspace_name: ${{ needs.get-config.outputs.aml_workspace }}     
@@ -20,7 +20,7 @@ jobs:
           
   register-dataset:
     needs: get-config
-    uses: Azure/mlops-templates/.github/workflows/register-dataset.yml@main
+      uses: Azure/mlops-templates/.github/workflows/register-dataset.yml@db3912275f3d10f7e5f30ade4491f92cb3cae0cc
     with:
       resource_group: ${{ needs.get-config.outputs.resource_group }}
       workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
@@ -31,7 +31,7 @@ jobs:
       
   create-compute:
       needs: [get-config,register-environment,register-dataset]
-      uses: Azure/mlops-templates/.github/workflows/create-compute.yml@main
+      uses: Azure/mlops-templates/.github/workflows/create-compute.yml@db3912275f3d10f7e5f30ade4491f92cb3cae0cc
       with:
         cluster_name: cpu-cluster
         size: Standard_DS3_v2
@@ -45,7 +45,7 @@ jobs:
       
   run-pipeline:
       needs: [get-config,register-environment,create-compute,register-dataset]
-      uses: Azure/mlops-templates/.github/workflows/run-pipeline.yml@main
+      uses: Azure/mlops-templates/.github/workflows/run-pipeline.yml@db3912275f3d10f7e5f30ade4491f92cb3cae0cc
       with:
         resource_group: ${{ needs.get-config.outputs.resource_group }}
         workspace_name: ${{ needs.get-config.outputs.aml_workspace }}     
